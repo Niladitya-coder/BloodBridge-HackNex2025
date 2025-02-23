@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Search - BloodBridge</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+        }
+
+        .navbar {
+            background-color: #e63946;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            color: white;
+            text-decoration: none;
+            font-size: 1.5rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .search-container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .search-options {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .search-option {
+            flex: 1;
+            max-width: 300px;
+            padding: 2rem;
+            border: 2px solid #e63946;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .search-option:hover, .search-option.active {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+            background-color: #fff5f5;
+        }
+
+        .search-option i {
+            font-size: 2.5rem;
+            color: #e63946;
+            margin-bottom: 1rem;
+        }
+
+        .search-option h3 {
+            margin-bottom: 0.5rem;
+            color: #1d3557;
+            font-size: 1.5rem;
+        }
+
+        .search-form {
+            display: none;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #1d3557;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #e63946;
+            box-shadow: 0 0 0 2px rgba(230, 57, 70, 0.1);
+        }
+
+        .search-button {
+            width: 100%;
+            padding: 0.8rem;
+            background-color: #e63946;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .search-button:hover {
+            background-color: #dc2f3c;
+        }
+
+        .results-table {
+            display: none;
+            margin-top: 2rem;
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .results-table th,
+        .results-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .results-table th {
+            background-color: #f8f9fa;
+            color: #1d3557;
+            font-weight: bold;
+        }
+
+        .results-table tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        .contact-button {
+            padding: 0.5rem 1rem;
+            background-color: #e63946;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .contact-button:hover {
+            background-color: #dc2f3c;
+        }
+
+        @media (max-width: 768px) {
+            .search-options {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .search-option {
+                width: 100%;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .results-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="index.html" class="logo">BLOODBRIDGE</a>
+    </nav>
+
+    <div class="container">
+        <div class="search-container">
+            <!-- Search Options -->
+            <div class="search-options">
+                <div class="search-option" onclick="showSearchForm('donor')">
+                    <i class="fas fa-user"></i>
+                    <h3>Find Blood Donors</h3>
+                    <p>Search for available donors</p>
+                </div>
+                <div class="search-option" onclick="showSearchForm('bank')">
+                    <i class="fas fa-hospital"></i>
+                    <h3>Find Blood Banks</h3>
+                    <p>Search for blood banks</p>
+                </div>
+            </div>
+
+            <!-- Donor Search Form -->
+            <form id="donor-search" class="search-form" onsubmit="return handleDonorSearch(event)">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="donor-age">Age</label>
+                        <input type="number" id="donor-age" min="18" max="65">
+                    </div>
+                    <div class="form-group">
+                        <label for="donor-gender">Gender</label>
+                        <select id="donor-gender">
+                            <option value="">Select Gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="donor-blood-group">Blood Group</label>
+                        <select id="donor-blood-group" required>
+                            <option value="">Select Blood Group</option>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="donor-city">City</label>
+                        <input type="text" id="donor-city" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="donor-location">Location</label>
+                        <input type="text" id="donor-location" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="donor-units">Required Units</label>
+                        <input type="number" id="donor-units" min="1" required>
+                    </div>
+                </div>
+                <button type="submit" class="search-button">Search Donors</button>
+            </form>
+
+            <!-- Blood Bank Search Form -->
+            <form id="bank-search" class="search-form" onsubmit="return handleBankSearch(event)">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="bank-city">City</label>
+                        <input type="text" id="bank-city" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="bank-blood-group">Blood Group</label>
+                        <select id="bank-blood-group" required>
+                            <option value="">Select Blood Group</option>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="bank-location">Location</label>
+                        <input type="text" id="bank-location" required>
+                    </div>
+                </div>
+                <button type="submit" class="search-button">Search Blood Banks</button>
+            </form>
+
+            <!-- Donor Results Table -->
+            <table id="donor-results" class="results-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Age</th>
+                        <th>Gender</th>
+                        <th>Blood Group</th>
+                        <th>Location</th>
+                        <th>Last Donation</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Sample data - will be populated by JavaScript -->
+                </tbody>
+            </table>
+
+            <!-- Blood Bank Results Table -->
+            <table id="bank-results" class="results-table">
+                <thead>
+                    <tr>
+                        <th>Blood Bank Name</th>
+                        <th>Location</th>
+                        <th>Available Units</th>
+                        <th>Contact Number</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Sample data - will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        function showSearchForm(type) {
+            // Hide all forms and tables
+            document.querySelectorAll('.search-form, .results-table').forEach(el => el.style.display = 'none');
+            
+            // Remove active class from all options
+            document.querySelectorAll('.search-option').forEach(el => el.classList.remove('active'));
+            
+            // Show selected form and add active class
+            if (type === 'donor') {
+                document.getElementById('donor-search').style.display = 'block';
+                event.currentTarget.classList.add('active');
+            } else {
+                document.getElementById('bank-search').style.display = 'block';
+                event.currentTarget.classList.add('active');
+            }
+        }
+
+        function handleDonorSearch(event) {
+            event.preventDefault();
+            
+            // Sample donor data - replace with actual API call
+            const sampleDonors = [
+                { name: "John Doe", age: 28, gender: "Male", bloodGroup: "O+", location: "Downtown", lastDonation: "2024-01-15" },
+                { name: "Jane Smith", age: 35, gender: "Female", bloodGroup: "A+", location: "Uptown", lastDonation: "2024-02-01" }
+            ];
+
+            const tbody = document.querySelector('#donor-results tbody');
+            tbody.innerHTML = '';
+
+            sampleDonors.forEach(donor => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${donor.name}</td>
+                        <td>${donor.age}</td>
+                        <td>${donor.gender}</td>
+                        <td>${donor.bloodGroup}</td>
+                        <td>${donor.location}</td>
+                        <td>${donor.lastDonation}</td>
+                        <td><button class="contact-button">Contact</button></td>
+                    </tr>
+                `;
+            });
+
+            document.getElementById('donor-results').style.display = 'table';
+        }
+
+        function handleBankSearch(event) {
+            event.preventDefault();
+            
+            // Sample blood bank data - replace with actual API call
+            const sampleBanks = [
+                { name: "City Blood Bank", location: "Main Street", units: 50, contact: "123-456-7890" },
+                { name: "Central Blood Center", location: "Park Road", units: 35, contact: "098-765-4321" }
+            ];
+
+            const tbody = document.querySelector('#bank-results tbody');
+            tbody.innerHTML = '';
+
+            sampleBanks.forEach(bank => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${bank.name}</td>
+                        <td>${bank.location}</td>
+                        <td>${bank.units}</td>
+                        <td>${bank.contact}</td>
+                        <td><button class="contact-button">Contact</button></td>
+                    </tr>
+                `;
+            });
+
+            document.getElementById('bank-results').style.display = 'table';
+        }
+    </script>
+</body>
+</html>

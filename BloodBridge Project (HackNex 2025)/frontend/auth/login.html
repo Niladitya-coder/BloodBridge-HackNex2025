@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - BloodBridge</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+        }
+
+        .navbar {
+            background-color: #e63946;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            color: white;
+            text-decoration: none;
+            font-size: 1.5rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .auth-form {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .auth-form h2 {
+            color: #1d3557;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+        }
+
+        .login-options {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .option-selector {
+            flex: 1;
+            max-width: 300px;
+            padding: 2rem;
+            border: 2px solid #e63946;
+            border-radius: 10px;
+            text-decoration: none;
+            color: #1d3557;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .option-selector:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+            background-color: #fff5f5;
+        }
+
+        .option-selector i {
+            font-size: 2.5rem;
+            color: #e63946;
+            margin-bottom: 1rem;
+        }
+
+        .option-selector h3 {
+            margin-bottom: 0.5rem;
+            font-size: 1.5rem;
+        }
+
+        .option-selector p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .login-form {
+            display: none;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #1d3557;
+            font-weight: bold;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #e63946;
+            box-shadow: 0 0 0 2px rgba(230, 57, 70, 0.1);
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 0.8rem;
+            background-color: #e63946;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .login-button:hover {
+            background-color: #dc2f3c;
+        }
+
+        .back-button {
+            background: none;
+            border: none;
+            color: #666;
+            cursor: pointer;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .back-button:hover {
+            color: #e63946;
+        }
+
+        .forgot-password {
+            display: block;
+            margin-top: 1rem;
+            color: #666;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .forgot-password:hover {
+            color: #e63946;
+        }
+
+        .auth-link {
+            margin-top: 2rem;
+            color: #666;
+        }
+
+        .auth-link a {
+            color: #e63946;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .auth-link a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .login-options {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .option-selector {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="../index.html" class="logo">BLOODBRIDGE</a>
+    </nav>
+
+    <div class="container">
+        <div class="auth-form">
+            <h2>Login as</h2>
+            
+            <!-- Initial Options -->
+            <div class="login-options" id="option-selection">
+                <div class="option-selector" onclick="showLoginForm('donor')">
+                    <i class="fas fa-user"></i>
+                    <h3>Blood Donor</h3>
+                    <p>Login to your donor account</p>
+                </div>
+                <div class="option-selector" onclick="showLoginForm('hospital')">
+                    <i class="fas fa-hospital"></i>
+                    <h3>Hospital</h3>
+                    <p>Login to your hospital account</p>
+                </div>
+            </div>
+
+            <!-- Donor Login Form -->
+            <div id="donor-login" class="login-form">
+                <h3 style="color: #e63946; margin-bottom: 1.5rem;">Blood Donor Login</h3>
+                <form onsubmit="return handleDonorLogin(event)">
+                    <div class="form-group">
+                        <label for="donor-email">Email</label>
+                        <input type="email" id="donor-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="donor-password">Password</label>
+                        <input type="password" id="donor-password" required>
+                    </div>
+                    <button type="submit" class="login-button">Login</button>
+                    <a href="#" class="forgot-password">Forgot Password?</a>
+                    <button type="button" class="back-button" onclick="showOptions()">← Back to options</button>
+                </form>
+            </div>
+
+            <!-- Hospital Login Form -->
+            <div id="hospital-login" class="login-form">
+                <h3 style="color: #e63946; margin-bottom: 1.5rem;">Hospital Login</h3>
+                <form onsubmit="return handleHospitalLogin(event)">
+                    <div class="form-group">
+                        <label for="hospital-email">Email</label>
+                        <input type="email" id="hospital-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="hospital-password">Password</label>
+                        <input type="password" id="hospital-password" required>
+                    </div>
+                    <button type="submit" class="login-button">Login</button>
+                    <a href="#" class="forgot-password">Forgot Password?</a>
+                    <button type="button" class="back-button" onclick="showOptions()">← Back to options</button>
+                </form>
+            </div>
+
+            <p class="auth-link">
+                Don't have an account? <a href="register.html">Register here</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function showLoginForm(type) {
+            document.getElementById('option-selection').style.display = 'none';
+            document.getElementById(`${type}-login`).style.display = 'block';
+        }
+
+        function showOptions() {
+            document.getElementById('option-selection').style.display = 'flex';
+            document.getElementById('donor-login').style.display = 'none';
+            document.getElementById('hospital-login').style.display = 'none';
+        }
+
+        function handleDonorLogin(event) {
+            event.preventDefault();
+            const email = document.getElementById('donor-email').value;
+            const password = document.getElementById('donor-password').value;
+            
+            // Add your donor login logic here
+            console.log('Donor login attempt:', { email, password });
+            // Redirect to donor dashboard after successful login
+            // window.location.href = 'donor_dashboard.html';
+        }
+
+        function handleHospitalLogin(event) {
+            event.preventDefault();
+            const email = document.getElementById('hospital-email').value;
+            const password = document.getElementById('hospital-password').value;
+            
+            // Add your hospital login logic here
+            console.log('Hospital login attempt:', { email, password });
+            // Redirect to hospital dashboard after successful login
+            // window.location.href = 'hospital_dashboard.html';
+        }
+    </script>
+</body>
+</html>
