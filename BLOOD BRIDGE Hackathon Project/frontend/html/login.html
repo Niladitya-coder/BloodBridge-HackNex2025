@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - BloodBridge</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link rel="stylesheet" href="../css/login.css">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="../index.html" class="logo">BLOODBRIDGE</a>
+    </nav>
+
+    <div class="container">
+        <div class="auth-form">
+            <h2>Login as</h2>
+            
+            <!-- Initial Options -->
+            <div class="login-options" id="option-selection">
+                <div class="option-selector" onclick="showLoginForm('donor')">
+                    <i class="fas fa-user"></i>
+                    <h3>Blood Donor</h3>
+                    <p>Login to your donor account</p>
+                </div>
+                <div class="option-selector" onclick="showLoginForm('hospital')">
+                    <i class="fas fa-hospital"></i>
+                    <h3>Hospital</h3>
+                    <p>Login to your hospital account</p>
+                </div>
+            </div>
+
+            <!-- Donor Login Form -->
+            <div id="donor-login" class="login-form">
+                <h3 style="color: #e63946; margin-bottom: 1.5rem;">Blood Donor Login</h3>
+                <form onsubmit="return handleDonorLogin(event)">
+                    <div class="form-group">
+                        <label for="donor-email">Email</label>
+                        <input type="email" id="donor-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="donor-password">Password</label>
+                        <input type="password" id="donor-password" required>
+                    </div>
+                    <button type="submit" class="login-button">Login</button>
+                    <a href="#" class="forgot-password">Forgot Password?</a>
+                    <button type="button" class="back-button" onclick="showOptions()">← Back to options</button>
+                </form>
+            </div>
+
+            <!-- Hospital Login Form -->
+            <div id="hospital-login" class="login-form">
+                <h3 style="color: #e63946; margin-bottom: 1.5rem;">Hospital Login</h3>
+                <form onsubmit="return handleHospitalLogin(event)">
+                    <div class="form-group">
+                        <label for="hospital-email">Email</label>
+                        <input type="email" id="hospital-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="hospital-password">Password</label>
+                        <input type="password" id="hospital-password" required>
+                    </div>
+                    <button type="submit" class="login-button">Login</button>
+                    <a href="#" class="forgot-password">Forgot Password?</a>
+                    <button type="button" class="back-button" onclick="showOptions()">← Back to options</button>
+                </form>
+            </div>
+
+            <p class="auth-link">
+                Don't have an account? <a href="register.html">Register here</a>
+            </p>
+        </div>
+    </div>
+
+    <script src="../js/login.js"></script>
+</body>
+</html>

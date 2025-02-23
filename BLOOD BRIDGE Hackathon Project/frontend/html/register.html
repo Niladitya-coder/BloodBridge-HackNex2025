@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register - BloodBridge</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link rel="stylesheet" href="../css/register.css">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="../index.html" class="logo">BLOODBRIDGE</a>
+    </nav>
+
+    <div class="container">
+        <div class="auth-form">
+            <h2>Register as</h2>
+            <div class="registration-options">
+                <a href="#" class="registration-option" id="donor-option">
+                    <i class="fas fa-user"></i>
+                    <h3>Blood Donor</h3>
+                    <p>Register to donate blood and save lives</p>
+                </a>
+                <a href="register_hospital.html" class="registration-option">
+                    <i class="fas fa-hospital"></i>
+                    <h3>Hospital</h3>
+                    <p>Register to manage blood inventory</p>
+                </a>
+            </div>
+            <p class="auth-link">
+                Already have an account? <a href="login.html">Login here</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Warning Modal -->
+    <div id="warningModal" class="modal">
+        <div class="modal-content">
+            <h3 class="modal-title">Important Health Notice</h3>
+            <p class="modal-text">
+                Before proceeding with donor registration, please confirm that you:
+                <br><br>
+                • Do not have diabetes or any blood-related diseases
+                <br>
+                • Are physically fit and healthy
+                <br>
+                • Meet the minimum age requirement of 18 years
+                <br>
+                • Haven't donated blood in the last 3 months
+                <br><br>
+                By clicking "I Agree", you confirm that you meet all these requirements and are eligible to donate blood.
+            </p>
+            <div class="modal-buttons">
+                <button class="modal-button modal-disagree" onclick="closeModal()">Cancel</button>
+                <button class="modal-button modal-agree" onclick="proceedToDonorRegistration()">I Agree</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/register.js"></script>
+</body>
+</html>
